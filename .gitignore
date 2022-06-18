@@ -32,7 +32,6 @@ local.properties
 # node.js
 #
 node_modules/
-coverage/
 npm-debug.log
 yarn-error.log
 
@@ -58,6 +57,3 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-
-# VSCode
-.vscode/

@@ -2,30 +2,43 @@ import React from 'react';
 import { TodoInput } from '../../components/TodoInput';
 import { fireEvent, render } from '@testing-library/react-native';
 
-describe('TodoInput', () => {
-  it('should be able to submit the input text by "submitEditing" event', async () => {
-    const mockTodoTask = jest.fn();
+let mockedAddTask: jest.Mock;
 
-    const { getByPlaceholderText } = render(<TodoInput addTask={mockTodoTask} />);
+describe('TodoInput', () => {
+  beforeAll(() => {
+    mockedAddTask = jest.fn();
+  })
+
+  it('should be able to submit the input text by "submitEditing" event', async () => {
+    const { getByPlaceholderText } = render(<TodoInput addTask={mockedAddTask} />);
     const inputText = getByPlaceholderText('Adicionar novo todo...');
     
     fireEvent.changeText(inputText, 'Primeira task');
     fireEvent(inputText, 'submitEditing');
 
-    expect(mockTodoTask).toHaveBeenCalledWith('Primeira task');
+    expect(mockedAddTask).toHaveBeenCalledWith('Primeira task');
     expect(inputText).toHaveProp('value', '');
   });
-  it('should be able to submit the input text by addButton', () => {
-    const mockTodoTask = jest.fn();
 
-    const { getByPlaceholderText, getByTestId } = render(<TodoInput addTask={mockTodoTask} />);
+  it('should be able to submit the input text by addButton', () => {
+    const { getByPlaceholderText, getByTestId } = render(<TodoInput addTask={mockedAddTask} />);
     const inputText = getByPlaceholderText('Adicionar novo todo...');
     const addButton = getByTestId('add-new-task-button');
 
     fireEvent.changeText(inputText, 'Primeira task');
     fireEvent.press(addButton);
 
-    expect(mockTodoTask).toHaveBeenCalledWith('Primeira task');
+    expect(mockedAddTask).toHaveBeenCalledWith('Primeira task');
     expect(inputText).toHaveProp('value', '');
+  });
+
+  it('should not be able to add an empty task', () => {
+    const { getByPlaceholderText } = render(<TodoInput addTask={mockedAddTask} />);
+    const inputText = getByPlaceholderText('Adicionar novo todo...');
+    
+    fireEvent.changeText(inputText, '');
+    fireEvent(inputText, 'submitEditing');
+
+    expect(mockedAddTask).not.toHaveBeenCalledWith('');
   });
 });

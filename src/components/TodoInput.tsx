@@ -1,34 +1,40 @@
 import React, { useState } from 'react';
-import { Image, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-
-import checkIcon from '../assets/icons/Check.png';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
 interface TodoInputProps {
   addTask: (task: string) => void;
 }
 
 export function TodoInput({ addTask }: TodoInputProps) {
-  // const [task, setTask] = useState('');
+  const [task, setTask] = useState('');
 
   function handleAddNewTask() {
-    //TODO - Call addTask and clean input value 
+    if (task !== '') {
+      addTask(task);
+      setTask('');
+    }
   }
 
   return (
-    <View style={[styles.inputContainer, Platform.OS === 'ios' ? styles.inputIOSShadow : styles.inputAndroidShadow]}>
-      <TextInput 
-        style={styles.input} 
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
         placeholder="Adicionar novo todo..."
+        placeholderTextColor="#B2B2B2"
         returnKeyType="send"
-        //TODO - use value, onChangeText and onSubmitEditing props
+        selectionColor="#666666"
+        onSubmitEditing={handleAddNewTask}
+        onChangeText={setTask}
+        value={task}
       />
       <TouchableOpacity
         testID="add-new-task-button"
         activeOpacity={0.7}
         style={styles.addButton}
-        //TODO - onPress prop
+        onPress={handleAddNewTask}
       >
-        <Image source={checkIcon} />
+        <Icon name="chevron-right" size={24} color="#B2B2B2" />
       </TouchableOpacity>
     </View>
   )
@@ -36,37 +42,28 @@ export function TodoInput({ addTask }: TodoInputProps) {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    backgroundColor: '#F5F4F8',
+    backgroundColor: '#FFF',
     borderRadius: 5,
-    marginTop: -25,
-    marginHorizontal: 40,
-    height: 50,
+    marginTop: -28,
+    marginHorizontal: 24,
     flexDirection: 'row',
     alignItems: 'center',
   },
   input: {
     flex: 1,
-    backgroundColor: '#F5F4F8',
-    paddingLeft: 12,
+    height: 56,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFF',
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-  },
-  inputIOSShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84
-  },
-  inputAndroidShadow: {
-    elevation: 5
+    borderRightWidth: 1,
+    borderRightColor: '#EBEBEB',
+    color: '#666666'
   },
   addButton: {
-    backgroundColor: '#3FAD27',
-    height: 50,
-    paddingHorizontal: 16,
+    backgroundColor: '#FFF',
+    height: 56,
+    paddingHorizontal: 12,
     justifyContent: 'center',
     alignItems: 'center',
     borderTopRightRadius: 5,
