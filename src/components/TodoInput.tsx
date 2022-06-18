@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { Image, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+
+import checkIcon from '../assets/icons/Check.png';
 
 interface TodoInputProps {
   addTask: (task: string) => void;
@@ -10,17 +11,15 @@ export function TodoInput({ addTask }: TodoInputProps) {
   // const [task, setTask] = useState('');
 
   function handleAddNewTask() {
-    //TODO - Call addTask if task not empty and clean input value 
+    //TODO - Call addTask and clean input value 
   }
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, Platform.OS === 'ios' ? styles.inputIOSShadow : styles.inputAndroidShadow]}>
       <TextInput 
         style={styles.input} 
         placeholder="Adicionar novo todo..."
-        placeholderTextColor="#B2B2B2"
         returnKeyType="send"
-        selectionColor="#666666"
         //TODO - use value, onChangeText and onSubmitEditing props
       />
       <TouchableOpacity
@@ -29,7 +28,7 @@ export function TodoInput({ addTask }: TodoInputProps) {
         style={styles.addButton}
         //TODO - onPress prop
       >
-        <Icon name="chevron-right" size={24} color="#B2B2B2" />
+        <Image source={checkIcon} />
       </TouchableOpacity>
     </View>
   )
@@ -37,28 +36,37 @@ export function TodoInput({ addTask }: TodoInputProps) {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#F5F4F8',
     borderRadius: 5,
-    marginTop: -28,
-    marginHorizontal: 24,
+    marginTop: -25,
+    marginHorizontal: 40,
+    height: 50,
     flexDirection: 'row',
     alignItems: 'center',
   },
   input: {
     flex: 1,
-    height: 56,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: '#F5F4F8',
+    paddingLeft: 12,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    borderRightWidth: 1,
-    borderRightColor: '#EBEBEB',
-    color: '#666666'
+  },
+  inputIOSShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84
+  },
+  inputAndroidShadow: {
+    elevation: 5
   },
   addButton: {
-    backgroundColor: '#FFF',
-    height: 56,
-    paddingHorizontal: 12,
+    backgroundColor: '#3FAD27',
+    height: 50,
+    paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
     borderTopRightRadius: 5,

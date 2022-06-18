@@ -8,20 +8,24 @@ describe('Home', () => {
     const { getByPlaceholderText, getByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
-    expect(getByText('0 tarefas'));
-
     fireEvent.changeText(inputElement, 'Primeira tarefa');
     fireEvent(inputElement, 'submitEditing');
     
-    expect(getByText('Primeira tarefa'));
-    expect(getByText('1 tarefa'));
-
     fireEvent.changeText(inputElement, 'Segunda tarefa');
     fireEvent(inputElement, 'submitEditing');
 
-    expect(getByText('Primeira tarefa'));
-    expect(getByText('Segunda tarefa'));
-    expect(getByText('2 tarefas'));
+    getByText('Primeira tarefa');
+    getByText('Segunda tarefa');
+  });
+
+  it('should not be able to add an empty task', () => {
+    const { getByPlaceholderText, queryByText } = render(<Home />);
+    const inputElement = getByPlaceholderText('Adicionar novo todo...');
+
+    fireEvent.changeText(inputElement, '');
+    fireEvent(inputElement, 'submitEditing');
+
+    expect(queryByText('')).toBeNull();
   });
 
   it('should be able to render tasks as done and undone', () => {
@@ -38,8 +42,8 @@ describe('Home', () => {
 
     expect(buttonElement).toHaveStyle({
       flex: 1,
-      paddingHorizontal: 24,
-      paddingVertical: 15,
+      paddingHorizontal: 10,
+      paddingVertical: 12,
       marginBottom: 4,
       borderRadius: 4,
       flexDirection: 'row',
@@ -48,28 +52,31 @@ describe('Home', () => {
     expect(markerElement).toHaveStyle({
       height: 16,
       width: 16,
-      borderRadius: 4,
+      borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#B2B2B2',
-      marginRight: 15
+      borderColor: '#3D3D4D',
+      marginRight: 10
     });
     expect(taskElement).toHaveStyle({
-      color: '#666',
+      color: '#3D3D4D',
     });
 
     fireEvent.press(taskElement);
 
+    expect(buttonElement).toHaveStyle({
+      backgroundColor: 'rgba(25, 61, 223, 0.1)'
+    });
     expect(markerElement).toHaveStyle({
-      backgroundColor: '#1DB863'
+      backgroundColor: '#273FAD'
     });
     expect(taskElement).toHaveStyle({
-      color: '#1DB863',
+      color: '#A09CB1',
       textDecorationLine: 'line-through'
     });
   });
 
-  it('should be able to remove tasks after the trash icon was pressed', async () => {
-    const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(<Home />);
+  it('should be able to remove tasks by "longPress" event', async () => {
+    const { getByPlaceholderText, getByText, queryByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
     fireEvent.changeText(inputElement, 'Primeira tarefa');
@@ -78,12 +85,11 @@ describe('Home', () => {
     fireEvent.changeText(inputElement, 'Segunda tarefa');
     fireEvent(inputElement, 'submitEditing');
 
-    const firstTaskTrashIcon = getByTestId('trash-0');
+    const firstTask = getByText('Primeira tarefa');
 
-    fireEvent(firstTaskTrashIcon, 'press');
+    fireEvent(firstTask, 'longPress');
 
     expect(queryByText('Primeira tarefa')).toBeNull();
-    expect(getByText('Segunda tarefa'));
-    expect(getByText('1 tarefa'));
+    getByText('Segunda tarefa');
   });
 })

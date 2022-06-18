@@ -1,50 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { View, Text, StatusBar, StyleSheet } from 'react-native';
 
-import logoImg from '../assets/images/logo/logo.png';
-
-interface HeaderProps {
-  tasksCounter: number;
-}
-
-export function Header({ tasksCounter }: HeaderProps) {
-  // const tasksCounterText = TODO render 'tarefa' if tasksCounter equals 1, otherwise render 'tarefas'
-  
+export function Header() {
   return (
-    <View style={styles.container}>
-      <Image source={logoImg} />
-      
-      <View style={styles.tasks}>
-        <Text style={styles.tasksCounter}>Você tem </Text>
-        {/* <Text style={styles.tasksCounterBold}>{tasksCounter} {tasksCounterText}</Text> */}
-      </View>
+    <View style={styles.header}>
+      <Text style={styles.headerText}>to.</Text>
+      <Text style={[styles.headerText, { fontFamily: 'Poppins-SemiBold' }]}>do</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: getStatusBarHeight(true) + 16,
-    paddingHorizontal: 24,
-    paddingBottom: 60,
-    backgroundColor: '#8257E5',
-    justifyContent: 'space-between',
+  header: {
+    paddingTop: StatusBar.currentHeight,
+    paddingBottom: 44,
+    backgroundColor: '#273FAD',
+    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
   },
-  tasks: {
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  tasksCounter: {
-    fontSize: 15,
+  headerText: {
+    fontSize: 24,
     color: '#FFF',
-    fontFamily: 'Inter-Regular',
-  },
-  tasksCounterBold: {
-    fontSize: 15,
-    color: '#FFF',
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Poppins-Regular',
   }
 });
